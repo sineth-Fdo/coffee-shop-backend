@@ -10,7 +10,10 @@ app.use(bodyParser.json());
 const PORT = 8080;
 
 
-
+// register rest api 
+app.get('/api/login', (req, res) => {
+    res.send('Hello World');
+});
 
 
 
