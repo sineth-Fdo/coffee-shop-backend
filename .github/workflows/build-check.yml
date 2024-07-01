@@ -27,4 +27,4 @@ jobs:
         run: npm install
 
       - name: Build Express.js 🛠️
-        run: npm start
+        run: npm run build
