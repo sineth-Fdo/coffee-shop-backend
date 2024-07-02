@@ -15,7 +15,7 @@ interface IProduct {
 
 
 // * create product
-productRouter.post('/create-product/',validateToken(["admin"]), async (req : any,res : any) => {
+productRouter.post('/create-product/',validateToken(["admin" as string]), async (req : any,res : any) => {
     try {
 
         const { name, price, description, category, stock } = req.body as IProduct;
@@ -52,7 +52,7 @@ productRouter.post('/create-product/',validateToken(["admin"]), async (req : any
 })
 
 // * get all products
-productRouter.get('/all-products/',validateToken(["customer","admin"]), async (req : any,res : any) => {
+productRouter.get('/all-products/',validateToken(["customer" as string, "admin" as string]), async (req : any, res : any) => {
     try {
         const products = await Product.find();
         res.status(200).json({
