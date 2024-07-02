@@ -3,10 +3,11 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import dotenv from "dotenv";
 import express from 'express';
-import {createUser}  from './app/auth/register';
-import {loginUser}  from './app/auth/login';
+import { loginUser } from './app/auth/login';
+import { createUser } from './app/auth/register';
 import db from './db/database';
-import { validateToken } from './app/jwt/token';
+import productRouter from './routers/productRoute';
+import cartRouter from './routers/cartRoute';
 
 
 
@@ -24,20 +25,10 @@ db(); // * database connection
 
 // ! Routes
 app.post('/api/v1/register/', createUser);
-app.post('/api/v1/login', loginUser)
+app.post('/api/v1/login/', loginUser);
 
-
-// test routes
-app.post('/profile',validateToken("customer"),(req,res) => {
-    res.json({
-        details: "This is the profile data",
-    });
-})
-app.post('/adminprofile',validateToken("admin"),(req,res) => {
-    res.json({
-        details: "This is the admin profile data",
-    });
-})
+app.use('/api/v1/product',productRouter);
+app.use('/api/v1/cart',cartRouter);
 
 
 
