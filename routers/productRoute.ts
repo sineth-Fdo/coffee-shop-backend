@@ -13,7 +13,6 @@ interface IProduct {
     stock: number
 }
 
-
 // * create product
 productRouter.post('/create-product/',validateToken(["admin" as string]), async (req : any,res : any) => {
     try {
@@ -41,8 +40,6 @@ productRouter.post('/create-product/',validateToken(["admin" as string]), async 
             data: newProduct
         });
 
-
-
     }catch(err : any) {
         console.log(err)
         res.status(500).json({
@@ -65,7 +62,50 @@ productRouter.get('/all-products/',validateToken(["customer" as string, "admin" 
             message: "Internal Server Error"
         })
     }
-})
+});
+
+
+// * get product by id
+productRouter.get('/details/:id',validateToken(["customer" as string, "admin" as string]), async (req : any, res : any) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if(!product) {
+            return res.status(404).json({
+                message: "Product not found"
+            })
+        }
+        res.status(200).json({
+            message: "Product",
+            data: product
+        })
+    }catch(err : any) {
+        console.log(err)
+        res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+});
+
+// * delete product
+productRouter.delete('/delete/:id',validateToken(["admin" as string]), async (req : any, res : any) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if(!product) {
+            return res.status(404).json({
+                message: "Product not found"
+            })
+        }
+        await Product.deleteOne({ _id: req.params.id });
+        res.status(200).json({
+            message: "Product deleted successfully"
+        })
+    }catch(err : any) {
+        console.log(err)
+        res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+});
 
 
 
