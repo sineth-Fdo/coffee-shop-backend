@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import  CartItem  from "./cartItem";
+import CartItem from "./cartItem";
 
 
 const user = new mongoose.Schema({

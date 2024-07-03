@@ -27,7 +27,6 @@ cartRouter.post('/add-to-cart/', validateToken(["customer"]), async (req: any, r
             });
         }
 
-        // Add product to cart
         user.cart.push({ product: product._id, quantity: 1, itemPrice: product.price});
         await user.save();
 
@@ -62,7 +61,7 @@ cartRouter.get('/get-cart/', validateToken(["customer"]), async (req: any, res: 
 });
 
 // * delete item from cart
-cartRouter.delete('/delete-item/:itemId', validateToken(["customer"]), async (req: any, res: any) => {
+cartRouter.delete('/delete-item/:itemId/', validateToken(["customer"]), async (req: any, res: any) => {
     try {
 
         const user = await User.findById(req.user._id).populate('cart.product');
