@@ -5,7 +5,7 @@ import User from '../model/user';
 
 const cartRouter = Router();
 
-// Add product to cart
+// * Add product to cart
 cartRouter.post('/add-to-cart/', validateToken(["customer"]), async (req: any, res: any) => {
     try {
         const { product_id } = req.body;
@@ -28,7 +28,7 @@ cartRouter.post('/add-to-cart/', validateToken(["customer"]), async (req: any, r
         }
 
         // Add product to cart
-        user.cart.push({ product: product._id, quantity: 1 });
+        user.cart.push({ product: product._id, quantity: 1, itemPrice: product.price});
         await user.save();
 
         res.status(200).json({
@@ -38,11 +38,58 @@ cartRouter.post('/add-to-cart/', validateToken(["customer"]), async (req: any, r
         
 
     } catch (err: any) {
-        console.log(err);
+    
         res.status(500).json({
             message: "Internal Server Error"
         });
     }
 });
+
+// * Get all cart items
+cartRouter.get('/get-cart/', validateToken(["customer"]), async (req: any, res: any) => {
+    try {
+        const user = await User.findById(req.user._id).populate('cart.product');
+        res.status(200).json({
+            message: "Cart items",
+            data: user.cart
+        });
+    } catch (err: any) {
+        
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+    }
+});
+
+// * delete item from cart
+cartRouter.delete('/delete-item/:itemId', validateToken(["customer"]), async (req: any, res: any) => {
+    try {
+
+        const user = await User.findById(req.user._id).populate('cart.product');
+        const itemIndex = user.cart.findIndex((item: any) => item._id.toString() === req.params.itemId.toString());
+
+        if (itemIndex === -1) {
+            return res.status(404).json({
+                message: "Item not found"
+            });
+        }
+
+        user.cart.splice(itemIndex, 1);
+        await user.save();
+
+        res.status(200).json({
+            message: "Item deleted successfully",
+            data: user.cart
+        });
+
+
+    }catch(err : any) {
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+    }
+});
+
+
 
 export default cartRouter;

@@ -29,11 +29,6 @@ const product = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    quantity: {
-        type: Number,
-        required: false,
-        default: 1
-    },
     image: {
         type: String,
         required: false,

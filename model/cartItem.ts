@@ -6,6 +6,9 @@ const cartItem = new mongoose.Schema({
         ref: 'Product',
         
     },
+    itemPrice : {
+        type: Number,
+    },
     quantity: {
         type: Number,
         default: 1
