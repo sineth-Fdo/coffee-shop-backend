@@ -78,4 +78,68 @@ orderRouter.put('/update-order-status/:id', validateToken(["admin"]), async (req
     }
 });
 
+// * get order by id
+orderRouter.get('/get-order/:id', validateToken(["admin"]), async (req: any, res: any) => {
+    try {
+        const order = await OrderList.findById(req.params.id).populate('orderedUser');
+        if (!order) {
+            return res.status(404).json({
+                message: "Order not found"
+            });
+        }
+        res.status(200).json({
+            message: "Order",
+            data: order
+        });
+    } catch (err: any) {
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+    }
+});
+
+// * delete order
+orderRouter.delete('/delete-order/:id', validateToken(["admin"]), async (req: any, res: any) => {
+    try {
+        const order = await OrderList.findByIdAndDelete(req.params.id);
+        if (!order) {
+            return res.status(404).json({
+                message: "Order not found"
+            });
+        }
+        res.status(200).json({
+            message: "Order deleted successfully",
+            data: order
+        });
+    } catch (err: any) {
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+    }
+});
+
+// * get orders by product id
+orderRouter.get('/get-orders-by-product-id/:id', validateToken(["admin"]), async (req: any, res: any) => {
+    try {
+        const { product_id } = req.params;
+        const orders = await OrderList.find({ 'cart.product': product_id }).populate('orderedUser');
+        if (!orders) {
+            return res.status(404).json({
+                message: "Orders not found"
+            });
+        }
+
+        res.status(200).json({
+            message: "Orders",
+            data: orders
+        });
+
+    } catch (err: any) {
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+    }
+});
+
+
 export default orderRouter;

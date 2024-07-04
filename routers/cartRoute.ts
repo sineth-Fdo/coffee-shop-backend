@@ -5,10 +5,14 @@ import User from '../model/user';
 
 const cartRouter = Router();
 
+interface IProductId {
+    product_id: string;
+}
+
 // * Add product to cart
 cartRouter.post('/add-to-cart/', validateToken(["customer"]), async (req: any, res: any) => {
     try {
-        const { product_id } = req.body;
+        const { product_id  }   = req.body as IProductId ;
         const user = await User.findById(req.user._id).populate('cart.product');
         const product = await Product.findById(product_id);
 
@@ -27,7 +31,8 @@ cartRouter.post('/add-to-cart/', validateToken(["customer"]), async (req: any, r
             });
         }
 
-        user.cart.push({ product: product._id, quantity: 1, itemPrice: product.price});
+        user.cart.push({ product: product._id, quantity: 1, itemPrice: product.price,});
+        user.total += product.price as number;
         await user.save();
 
         res.status(200).json({
@@ -74,6 +79,7 @@ cartRouter.delete('/delete-item/:itemId/', validateToken(["customer"]), async (r
         }
 
         user.cart.splice(itemIndex, 1);
+        user.total = user.cart.reduce((acc: number, item: any) => acc + item.itemPrice, 0);
         await user.save();
 
         res.status(200).json({
