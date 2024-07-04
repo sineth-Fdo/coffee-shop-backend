@@ -33,6 +33,11 @@ const product = new mongoose.Schema({
         type: String,
         required: false,
         default: 'https://res.cloudinary.com/dkkgmzpqd/image/upload/v1631978463/ecommerce/placeholder.png'
+    },
+    orderCount : {
+        type: Number,
+        required: false,
+        default: 0
     }
     
 
