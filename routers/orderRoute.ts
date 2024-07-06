@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { validateToken } from '../app/jwt/token';
-import User from '../model/user';
+import { validateToken } from '../middleware/jwt/token';
 import OrderList from '../model/orderList';
+import User from '../model/user';
 
 const orderRouter = Router();
 
