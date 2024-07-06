@@ -9,9 +9,9 @@ import express from 'express';
 import { loginUser } from './app/auth/login';
 import { createUser } from './app/auth/register';
 import db from './db/database';
-import productRouter from './routers/productRoute';
 import cartRouter from './routers/cartRoute';
 import orderRouter from './routers/orderRoute';
+import productRouter from './routers/productRoute';
 
 
 

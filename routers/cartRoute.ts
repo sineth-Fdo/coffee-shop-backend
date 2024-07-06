@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { validateToken } from '../app/jwt/token';
+import { validateToken } from '../middleware/jwt/token';
 import Product from '../model/product';
 import User from '../model/user';
 
