@@ -18,7 +18,14 @@ export const loginUser = async (req: any, res: any) => {
         }else {
             const accessToken = createToken(user);
         
-            res.json(accessToken);
+            res.json({
+                message: "Login Success",
+                token: accessToken,
+                user: {
+                    email: user.email,
+                    role: user.role
+                }
+            });
         }
 
     })
