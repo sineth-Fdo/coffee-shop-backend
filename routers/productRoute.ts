@@ -10,14 +10,15 @@ interface IProduct {
     price: number,
     description: string,
     category: string,
-    stock: number
+    stock: number,
+    image: string
 }
 
 // * create product
 productRouter.post('/create-product/',validateToken(["admin" as string]), async (req : any,res : any) => {
     try {
 
-        const { name, price, description, category, stock } = req.body as IProduct;
+        const { name, price, description, category, stock, image } = req.body as IProduct;
 
         if(!name || !price || !description || !stock ) {
             return res.status(400).json({
@@ -31,6 +32,7 @@ productRouter.post('/create-product/',validateToken(["admin" as string]), async 
             description,
             category,
             stock,
+            image
             
         })
 
