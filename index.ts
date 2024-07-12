@@ -10,6 +10,7 @@ import { loginUser } from './app/auth/login';
 import { createUser } from './app/auth/register';
 import db from './db/database';
 import cartRouter from './routers/cartRoute';
+import category from './routers/categoryRoute';
 import orderRouter from './routers/orderRoute';
 import productRouter from './routers/productRoute';
 
@@ -34,6 +35,7 @@ app.post('/api/v1/login/', loginUser);
 app.use('/api/v1/product',productRouter);
 app.use('/api/v1/cart',cartRouter);
 app.use('/api/v1/order',orderRouter);
+app.use('/api/v1/category',category);
 
 app.get('/', (req, res) => {
     res.send('Hello World');

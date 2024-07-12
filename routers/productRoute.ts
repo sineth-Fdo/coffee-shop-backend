@@ -109,6 +109,24 @@ productRouter.delete('/delete/:id',validateToken(["admin" as string]), async (re
     }
 });
 
+// * get products by category
+productRouter.get('/category/:category',validateToken(["customer" as string, "admin" as string]), async (req : any, res : any) => {
+    try {
+        const products = await Product.find({ category: req.params.category });
+        res.status(200).json({
+            message: "Products",
+            data: products
+        })
+    }
+    catch(err : any) {
+        console.log(err)
+        res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+}
+);
+
 
 
 
