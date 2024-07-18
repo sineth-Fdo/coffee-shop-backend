@@ -5,14 +5,11 @@ import User from '../model/user';
 
 const cartRouter = Router();
 
-interface IProductId {
-    product_id: string;
-}
 
 // * Add product to cart
-cartRouter.post('/add-to-cart/', validateToken(["customer"]), async (req: any, res: any) => {
+cartRouter.post('/add-to-cart/:product_id', validateToken(["customer"]), async (req: any, res: any) => {
     try {
-        const { product_id  }   = req.body as IProductId ;
+        const { product_id  }   = req.params;
         const user = await User.findById(req.user._id).populate('cart.product');
         const product = await Product.findById(product_id);
 
@@ -55,7 +52,7 @@ cartRouter.get('/get-cart/', validateToken(["customer"]), async (req: any, res: 
         const user = await User.findById(req.user._id).populate('cart.product');
         res.status(200).json({
             message: "Cart items",
-            data: user.cart
+            data: user
         });
     } catch (err: any) {
         

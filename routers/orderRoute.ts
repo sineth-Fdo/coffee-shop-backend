@@ -99,7 +99,7 @@ orderRouter.get('/get-order/:id', validateToken(["admin"]), async (req: any, res
 });
 
 // * delete order
-orderRouter.delete('/delete-order/:id', validateToken(["admin"]), async (req: any, res: any) => {
+orderRouter.delete('/delete-order/:id', validateToken(["customer" as string, "admin" as string]), async (req: any, res: any) => {
     try {
         const order = await OrderList.findByIdAndDelete(req.params.id);
         if (!order) {
@@ -131,7 +131,8 @@ orderRouter.get('/get-orders-by-product-id/:id', validateToken(["admin"]), async
 
         res.status(200).json({
             message: "Orders",
-            data: orders
+            data: orders,
+            count: orders.length
         });
 
     } catch (err: any) {
