@@ -7,9 +7,9 @@ const cartRouter = Router();
 
 
 // * Add product to cart
-cartRouter.post('/add-to-cart/:product_id', validateToken(["customer"]), async (req: any, res: any) => {
+cartRouter.post('/add-to-cart/:product_id/:qty', validateToken(["customer"]), async (req: any, res: any) => {
     try {
-        const { product_id  }   = req.params;
+        const { product_id, qty }   = req.params;
         const user = await User.findById(req.user._id).populate('cart.product');
         const product = await Product.findById(product_id);
 
@@ -28,8 +28,10 @@ cartRouter.post('/add-to-cart/:product_id', validateToken(["customer"]), async (
             });
         }
 
-        user.cart.push({ product: product._id, quantity: 1, itemPrice: product.price,});
-        user.total += product.price as number;
+        const itemPriceWithQty = product.price * qty as number;
+
+        user.cart.push({ product: product._id, quantity: qty, itemPrice: itemPriceWithQty,});
+        user.total += itemPriceWithQty as number;
         await user.save();
 
         res.status(200).json({
