@@ -81,15 +81,17 @@ orderRouter.put('/update-order-status/:id', validateToken(["admin"]), async (req
 // * get order by id
 orderRouter.get('/get-order/:id', validateToken(["admin"]), async (req: any, res: any) => {
     try {
-        const order = await OrderList.findById(req.params.id).populate('orderedUser');
+        const order = (await OrderList.findById(req.params.id).populate('orderedUser'));
         if (!order) {
             return res.status(404).json({
                 message: "Order not found"
             });
         }
+        const userCart = await User.findById(order.orderedUser._id).populate('cart.product');
         res.status(200).json({
             message: "Order",
-            data: order
+            data: order,
+            orderedCart: userCart.cart
         });
     } catch (err: any) {
         res.status(500).json({
