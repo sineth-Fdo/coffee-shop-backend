@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  mongo_db:
+    container_name: mongo_db
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_db:/data/db
+
+  app:
+    container_name: app
+    build: .
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo_db
+    environment:
+      - MONGO_URI=mongodb://mongo_db:27017
+
+volumes:
+  mongo_db:
