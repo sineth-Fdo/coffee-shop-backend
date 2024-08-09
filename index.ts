@@ -38,7 +38,7 @@ app.use('/api/v1/order',orderRouter);
 app.use('/api/v1/category',category);
 
 app.get('/', (req, res) => {
-    res.send('Hello World');
+    res.send('Hello World...');
 });
 
 
