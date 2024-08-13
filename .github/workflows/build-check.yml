@@ -71,12 +71,12 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t sinethfernando/coffeeshop-backend:${{ github.sha }} .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/coffeeshop-backend:${{ github.sha }} .
 
       - name: Tag Docker image
-        run: docker tag sinethfernando/coffeeshop-backend:${{ github.sha }} sinethfernando/coffeeshop-backend:latest
+        run: docker tag ${{ secrets.DOCKER_USERNAME }}/coffeeshop-backend:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/coffeeshop-backend:v1.0
 
       - name: Push Docker image
         run: |
-          docker push sinethfernando/coffeeshop-backend:${{ github.sha }}
-          docker push sinethfernando/coffeeshop-backend:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/coffeeshop-backend:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/coffeeshop-backend:v1.0
