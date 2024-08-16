@@ -46,3 +46,5 @@ app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
 });
 
+// docker pull ${{ secrets.DOCKER_USERNAME }}/coffeeshop-backend:v1.0
+
