@@ -54,3 +54,22 @@ jobs:
         run: |
           docker tag ${{ secrets.DOCKER_USERNAME }}/coffeeshop-backend:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/coffeeshop-backend:v1.0
           docker push ${{ secrets.DOCKER_USERNAME }}/coffeeshop-backend:v1.0
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Deploy to EC2
+        env:
+          SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+
+        run: |
+          echo "$SSH_KEY" > $GITHUB_WORKSPACE/coffeeshopkey.pem
+          chmod 600 $GITHUB_WORKSPACE/coffeeshopkey.pem
+          ssh -o StrictHostKeyChecking=no -i $GITHUB_WORKSPACE/coffeeshopkey.pem ubuntu@ec2-16-171-16-255.eu-north-1.compute.amazonaws.com << 'EOF'
+            docker pull ${{ secrets.DOCKER_USERNAME }}/coffeeshop-backend:v1.0
+            docker stop $(docker ps -q --filter ancestor=${{ secrets.DOCKER_USERNAME }}/coffeeshop-backend:v1.0)
+            docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/coffeeshop-backend:v1.0
+          EOF
